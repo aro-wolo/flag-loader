@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>Country by Flag</title>
+		<style>
+			body {
+				background-color: black;
+				color: white;
+				padding: 20px;
+			}
+			select {
+				font-size: 30px;
+				padding: 10px;
+			}
+			#flag {
+				width: 100%;
+				position: absolute;
+			}
+			#loading {
+				width: 140px;
+				position: absolute;
+				z-index: 999;
+				top: 10%;
+				right: 45%;
+				display: none;
+			}
+			#others {
+				position: absolute;
+				z-index: 1999;
+				top: 30%;
+				right: 5%;
+			}
+			#others span {
+				font-size: 20px;
+				display: block;
+				padding-top: 10px;
+				font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app-id"></div>
+		<img src="loading.gif" id="loading" />
+		<img id="flag" />
+		<div id="others"></div>
+	</body>
+	<script src="app.js"></script>
+</html>
