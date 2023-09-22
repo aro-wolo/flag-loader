@@ -1,44 +1,55 @@
 const appid = document.getElementById("app-id");
 const flag = document.getElementById("flag");
 const loading = document.getElementById("loading");
+const others = document.getElementById("others");
+
 window.addEventListener("load", function () {
-	const xhttp = new XMLHttpRequest();
-	xhttp.open("GET", "https://restcountries.com/v3.1/all?fields=name");
-	xhttp.send();
-	//console.log(xhttp);
-	xhttp.onload = function () {
-		let data = xhttp.responseText;
-		data = JSON.parse(data); // array of objects
+	const req = new XMLHttpRequest();
+	req.open("GET", "https://restcountries.com/v3.1/all?fields=name");
+	req.send();
 
-		let sel_item = "";
-		for (d of data) {
-			// console.log(d);
-			sel_item = `${sel_item} <option>${d.name.common}</option>`;
+	req.onload = function () {
+		// console.log(req);
+		let data = req.responseText;
+		data = JSON.parse(data);
+
+		// data[index].name.common
+		let opt = "";
+		for (c of data) {
+			opt = `${opt} <option>${c.name.common}</option>`;
 		}
+		const selectC = document.createElement("select");
+		selectC.innerHTML = opt;
+		appid.appendChild(selectC);
 
-		appid.innerHTML = `<select id="selItem">${sel_item}</select>`;
+		selectC.addEventListener("change", function (e) {
+			loading.style.display = "inline";
 
-		const selItem = document.querySelector("#selItem");
-		selItem.addEventListener("change", function (e) {
-			loading.style.display = "block";
-			let indexvalue = e.target.selectedIndex;
-			let country_name = e.target.options[indexvalue].innerText;
+			let i = e.target.selectedIndex;
+			let country = e.target.options[i].innerText;
 
-			const reqFlag = new XMLHttpRequest();
-			reqFlag.open(
-				"GET",
-				"https://restcountries.com/v3.1/name/" + country_name
-			);
-			reqFlag.send();
+			const cReq = new XMLHttpRequest();
+			cReq.open("GET", "https://restcountries.com/v3.1/name/" + country);
+			cReq.send();
 
-			reqFlag.onload = function () {
-				let data = reqFlag.responseText;
-				data = JSON.parse(data);
+			cReq.onload = function () {
+				let data = JSON.parse(cReq.responseText);
 				flag.src = data[0].flags.svg;
+				const coa = document.createElement("img");
+				const pop = document.createElement("span");
+				pop.innerText = data[0].population;
+				coa.src = data[0].coatOfArms.svg;
+				coa.style.width = "100px";
+
+				others.innerHTML = "";
+				others.appendChild(coa);
+				others.appendChild(pop);
+				console.log(others);
 			};
-			reqFlag.onreadystatechange = function () {
-				console.log(reqFlag.readyState);
-				if (reqFlag.readyState == 4) {
+
+			cReq.onreadystatechange = function () {
+				console.log(XMLHttpRequest.DONE);
+				if (cReq.readyState == 4) {
 					loading.style.display = "none";
 				}
 			};
